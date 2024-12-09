@@ -26,5 +26,26 @@ class TestPony(unittest.TestCase):
         total_score = self.pony.calculate_total_score()
         self.assertEqual(total_score, 36)  # 6 traits * (5 base + 1 modifier)
 
+class TestArgumentParsing(unittest.TestCase):
+    def test_list_ponies(self):
+        with patch('sys.argv', ['pony_battle.py', '--list_ponies']):
+            with patch('builtins.print') as mocked_print:
+                with self.assertRaises(SystemExit):
+                    pony_battle.main()
+                mocked_print.assert_any_call('twilight sparkle')
+                mocked_print.assert_any_call('rainbow dash')
+                mocked_print.assert_any_call('fluttershy')
+                mocked_print.assert_any_call('applejack')
+                mocked_print.assert_any_call('rarity')
+                mocked_print.assert_any_call('pinkie pie')
+
+    def test_no_arguments(self):
+        with patch('sys.argv', ['pony_battle.py']):
+            with self.assertRaises(SystemExit):
+                with patch('argparse.ArgumentParser.print_help') as mocked_help:
+                    pony_battle.main()
+                    mocked_help.assert_called_once()
+
+
 if __name__ == '__main__':
     unittest.main()
