@@ -47,18 +47,17 @@ parser.add_argument('-p2', '--pony2', type=str, help="Name of the second pony", 
 parser.add_argument('--list_ponies', action="store_true", help="List the names of available competitors")
 
 def main():
-    try:
-        args = parser.parse_args()
-    except:
-        # Print usage message if no args supplied
-        parser.print_help()
-        exit()
+    args = parser.parse_args()
 
     # If --list_ponies in args print list of available names 
     if args.list_ponies:
         print("The ponies ready to compete are:")
         for pony in ponies:
             print(pony)
+        exit()
+    # If pony1 or pony2 weren't supplied, print help and exit.
+    if not args.pony1 or not args.pony2:
+        parser.print_help()
         exit()
 
     # Convert pony names from args to lowercase
